@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # 🛢️ Base de Datos PostgreSQL
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: tienda
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # ⚙️ Backend - Node.js + Express
+  backend:
+    build: ./backend
+    container_name: tienda_backend
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PORT: 5000
+      DATABASE_URL: "postgresql://usuario:contraseña@db:5432/tienda"
+      JWT_SECRET: "clave-secreta-segura"
+      EMAIL_USER: "tu_email@gmail.com"
+      EMAIL_PASS: "tu_contraseña"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/usr/src/app
+    command: ["npm", "run", "dev"]
+
+  # 🎨 Frontend - SvelteKit
+  frontend:
+    build: ./frontend
+    container_name: tienda_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/usr/src/app
+    command: ["npm", "run", "dev"]
+
+volumes:
+  postgres_data:

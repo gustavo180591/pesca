@@ -1,5 +1,4 @@
 import express from 'express';
-import { verificarToken } from '../middlewares/authMiddleware.js';
 import { getAllProducts, getProductById } from '../controllers/productController.js';
 
 const router = express.Router();

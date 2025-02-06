@@ -1,0 +1,16 @@
+model Usuario {
+  id       Int     @id @default(autoincrement())
+  nombre   String
+  email    String  @unique
+  password String
+  rol      String  @default("cliente")
+}
+
+model Producto {
+  id          Int     @id @default(autoincrement())
+  nombre      String
+  descripcion String
+  precio      Float
+  stock       Int
+  categoria   String
+}
